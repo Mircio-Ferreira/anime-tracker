@@ -1,5 +1,7 @@
 package org.cesar.demo.backend.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.cesar.demo.backend.dto.user.UserRequest;
 import org.cesar.demo.backend.dto.user.UserResponse;
@@ -16,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@Tag(name = "Users", description = "User management (creation and lookup)")
 
 public class UserController {
     private final UserService userService;
@@ -24,6 +27,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @Operation(summary = "Find a user", description = "Returns the user for the given login, or 404 if it doesn't exist")
     @GetMapping("/{userLogin}")
     public ResponseEntity<UserResponse> findUser(@PathVariable String userLogin){
         try{
@@ -34,6 +38,7 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "List all users", description = "Returns every user currently stored")
     @GetMapping
     public ResponseEntity<List<UserResponse>> findAllUser(){
         List<User> users = userService.findAllUser();
@@ -41,6 +46,7 @@ public class UserController {
         return ResponseEntity.ok(userResponses);
     }
 
+    @Operation(summary = "Create a user", description = "Creates a new user, or 409 if the login already exists")
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest request){
         try{
