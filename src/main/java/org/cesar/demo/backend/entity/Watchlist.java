@@ -26,14 +26,14 @@ public class Watchlist {
     private int episodesWatched = 0;
     private String notes;
 
-    public Watchlist(User user, Anime anime, WatchingStatus watchingStatus,int episodesWatched){
+    public Watchlist(User user, Anime anime, WatchingStatus watchingStatus, int episodesWatched){
         this.user = user;
         this.anime = anime;
         this.watchingStatus = watchingStatus;
         this.episodesWatched = episodesWatched;
     }
 
-    public Watchlist(User user, Anime anime, WatchingStatus watchingStatus,int episodesWatched,String notes){
+    public Watchlist(User user, Anime anime, WatchingStatus watchingStatus, int episodesWatched, String notes){
         this(user, anime, watchingStatus, episodesWatched);
         this.notes = notes;
     }

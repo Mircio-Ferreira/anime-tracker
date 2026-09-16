@@ -24,7 +24,6 @@ public class Anime {
     private Integer totalEpisodes;
     private String studio;
     private String imageUrl;
-    private boolean active = true;
     @ManyToOne
     @JoinColumn(name = "season_id")
     private Season season;
