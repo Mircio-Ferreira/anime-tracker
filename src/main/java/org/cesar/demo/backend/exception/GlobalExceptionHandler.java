@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Map<String, Object>> handleValidation(ValidationException exception){
-        return buildResponse(HttpStatuseesi.BAD_REQUEST, exception.getMessage());
+        return buildResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
     private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus status, String message){
