@@ -29,10 +29,10 @@ public class AnimeController {
         this.animeService = animeService;
     }
 
-    @Operation(summary = "Find an anime", description = "Returns the anime for the given title, or 404 if it doesn't exist")
-    @GetMapping("/{title}")
-    public ResponseEntity<AnimeResponse> findAnime(@PathVariable String title){
-        Anime anime = animeService.findAnime(title);
+    @Operation(summary = "Find an anime", description = "Returns the anime for the given id, or 404 if it doesn't exist")
+    @GetMapping("/{id}")
+    public ResponseEntity<AnimeResponse> findAnime(@PathVariable Long id){
+        Anime anime = animeService.findAnimeById(id);
         return ResponseEntity.ok(AnimeResponse.fromEntity(anime));
     }
 
@@ -40,6 +40,15 @@ public class AnimeController {
     @GetMapping
     public ResponseEntity<Page<AnimeResponse>> findAll(@PageableDefault(size = 20) Pageable pageable){
         Page<AnimeResponse> animes = animeService.findAll(pageable).map(AnimeResponse::fromEntity);
+        return ResponseEntity.ok(animes);
+    }
+
+    @Operation(summary = "Search animes by title", description = "Returns animes whose title contains the given text (case-insensitive), paginated")
+    @GetMapping("/search")
+    public ResponseEntity<Page<AnimeResponse>> searchByTitle(
+            @RequestParam String title,
+            @PageableDefault(size = 20) Pageable pageable){
+        Page<AnimeResponse> animes = animeService.searchByTitle(title, pageable).map(AnimeResponse::fromEntity);
         return ResponseEntity.ok(animes);
     }
 
@@ -69,12 +78,12 @@ public class AnimeController {
     }
 
     @Operation(summary = "Update an anime", description = "Updates the data of an existing anime, or 404 if the anime/season doesn't exist, or 409 if the new title is already taken")
-    @PutMapping("/{currentTitle}")
+    @PutMapping("/{id}")
     public ResponseEntity<AnimeResponse> updateAnime(
-            @PathVariable String currentTitle,
+            @PathVariable Long id,
             @RequestBody @Valid AnimeRequest request){
         Anime updated = animeService.updateAnime(
-                currentTitle,
+                id,
                 request.title(),
                 request.dayOfWeek(),
                 request.totalEpisodes(),
@@ -85,10 +94,10 @@ public class AnimeController {
         return ResponseEntity.ok(AnimeResponse.fromEntity(updated));
     }
 
-    @Operation(summary = "Delete an anime", description = "Deletes the anime for the given title, or 404 if it doesn't exist")
-    @DeleteMapping("/{title}")
-    public ResponseEntity<Void> deleteAnime(@PathVariable String title){
-        animeService.deleteAnime(title);
+    @Operation(summary = "Delete an anime", description = "Deletes the anime for the given id, or 404 if it doesn't exist")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAnime(@PathVariable Long id){
+        animeService.deleteAnime(id);
         return ResponseEntity.noContent().build();
     }
 }

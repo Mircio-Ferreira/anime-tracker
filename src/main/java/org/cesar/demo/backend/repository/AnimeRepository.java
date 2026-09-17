@@ -12,6 +12,8 @@ public interface AnimeRepository extends JpaRepository <Anime,Long> {
 
     Optional<Anime> findByTitle(String title);
 
+    Page<Anime> findByTitleContainingIgnoreCase(String title, Pageable pageable);
+
     Page<Anime> findBySeason(Season season, Pageable pageable);
 
 }

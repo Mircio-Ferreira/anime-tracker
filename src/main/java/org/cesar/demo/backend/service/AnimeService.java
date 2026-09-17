@@ -40,8 +40,14 @@ public class AnimeService {
         );
     }
 
-    public void deleteAnime(String title){
-       Anime deleteAnime = findAnime(title);
+    public Anime findAnimeById(Long id){
+        return animeRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Anime not found: "+ id)
+        );
+    }
+
+    public void deleteAnime(Long id){
+       Anime deleteAnime = findAnimeById(id);
        animeRepository.delete(deleteAnime);
     }
 
@@ -49,20 +55,25 @@ public class AnimeService {
         return animeRepository.findAll(pageable);
     }
 
+    public Page<Anime> searchByTitle(String title, Pageable pageable){
+        return animeRepository.findByTitleContainingIgnoreCase(title, pageable);
+    }
+
     public Page<Anime> findAnimesBySeason(Year seasonYear, Seasonal seasonal, Pageable pageable){
         Season season = seasonService.findSeason(seasonYear, seasonal);
         return animeRepository.findBySeason(season, pageable);
     }
 
-    public Anime updateAnime(String currentTitle, String newTitle, DayOfWeek dayOfWeek, Integer totalEpisodes, String studio, String imageUrl, Year seasonYear, Seasonal seasonal){
+    public Anime updateAnime(Long id, String newTitle, DayOfWeek dayOfWeek, Integer totalEpisodes, String studio, String imageUrl, Year seasonYear, Seasonal seasonal){
 
-        Anime currentAnime = findAnime(currentTitle);
+        Anime currentAnime = findAnimeById(id);
 
-        boolean titleChanged = !currentTitle.equals(newTitle);
+        animeRepository.findByTitle(newTitle).ifPresent(existingAnime -> {
+            if(!existingAnime.getId().equals(id)){
+                throw new ConflictException("The anime: "+newTitle+" already exist in system");
+            }
+        });
 
-        if(titleChanged && animeRepository.findByTitle(newTitle).isPresent()){
-            throw new ConflictException("The anime: "+newTitle+" already exist in system");
-        }
         Season season = seasonService.findSeason(seasonYear,seasonal);
 
         currentAnime.setTitle(newTitle);

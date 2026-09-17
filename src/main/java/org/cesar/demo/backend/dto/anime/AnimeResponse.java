@@ -7,6 +7,7 @@ import org.cesar.demo.backend.enums.Seasonal;
 import java.time.Year;
 
 public record AnimeResponse(
+        Long id,
         String title,
         DayOfWeek dayOfWeek,
         Integer totalEpisodes,
@@ -17,6 +18,7 @@ public record AnimeResponse(
 
     public static AnimeResponse fromEntity(Anime anime){
         return new AnimeResponse(
+                anime.getId(),
                 anime.getTitle(),
                 anime.getDayOfWeek(),
                 anime.getTotalEpisodes(),

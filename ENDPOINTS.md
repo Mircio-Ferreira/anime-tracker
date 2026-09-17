@@ -28,12 +28,13 @@ Interface visual (Swagger UI, gerada automaticamente pelo `springdoc-openapi` a 
 
 | Método | Path | Body | Resposta | Erros |
 |---|---|---|---|---|
-| GET | `/animes/{title}` | — | `AnimeResponse` | 404 |
+| GET | `/animes/{id}` | — | `AnimeResponse` | 404 |
 | GET | `/animes` | — (query: `page`, `size`, `sort`) | `Page<AnimeResponse>` | — |
+| GET | `/animes/search` | — (query: `title`, `page`, `size`, `sort`) | `Page<AnimeResponse>` | — |
 | GET | `/animes/season/{seasonYear}/{seasonal}` | — (query: `page`, `size`, `sort`) | `Page<AnimeResponse>` | 404 (season não existe) |
 | POST | `/animes` | `AnimeRequest` | `AnimeResponse` (201) | 409 (título duplicado), 404 (season não existe) |
-| PUT | `/animes/{currentTitle}` | `AnimeRequest` (novo título/dados/season) | `AnimeResponse` | 404 (anime/season não existe), 409 (novo título já usado) |
-| DELETE | `/animes/{title}` | — | 204 | 404 |
+| PUT | `/animes/{id}` | `AnimeRequest` (novo título/dados/season) | `AnimeResponse` | 404 (anime/season não existe), 409 (novo título já usado) |
+| DELETE | `/animes/{id}` | — | 204 | 404 |
 
 ## Watchlist (`/watchlist`)
 
