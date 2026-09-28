@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.cesar.demo.backend.enums.WatchingStatus;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @IdClass(WatchlistId.class)
@@ -17,9 +19,11 @@ import org.cesar.demo.backend.enums.WatchingStatus;
 public class Watchlist {
     @Id
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
     @Id
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Anime anime;
     @Enumerated(EnumType.STRING)
     private WatchingStatus watchingStatus;
